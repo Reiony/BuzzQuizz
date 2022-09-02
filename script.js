@@ -64,6 +64,7 @@ const startCreationQuizz = ()=>{
 const secondPageCreationQuizz = ()=>{
     let questions = quizz.questions
     let main = document.querySelector('main');
+
     main.innerHTML= `
         <div class="creationPages">
             <h1 class='titleCreationQuizz'>Crie suas perguntas</h1>
@@ -73,39 +74,57 @@ const secondPageCreationQuizz = ()=>{
     `
     let i =0
     let askBoard = document.querySelector('.creationPages section')
-    console.log(askBoard)
+
     while(i<questions){
         askBoard.innerHTML+=`
             <div>
                 <h1>Pergunta ${i+1}</h1>
-                <ion-icon class="editIcon" name="construct-outline"></ion-icon>
+                <ion-icon onclick="turnOnOffEditBoard(this)" class="editIcon" name="construct-outline"></ion-icon>
                 <aside class='displayNone'>
-                <article>
-                    <input type="text" placeholder="Texto da pergunta">
-                    <input type="color">
-                </article>
-                <h1>Resposta correta</h1>
-                <article>
-                    <input type="text" placeholder="Resposta correta">
-                    <input type="url" placeholder="URL da imagem">
-                </article>
-                <h1>Respostas incorretas</h1>
-                <article>
-                    <input type="text" placeholder="Resposta incorreta 1">
-                    <input type="url" placeholder="URL da imagem 1">
-                </article>
-                <article>
-                    <input type="text" placeholder="Resposta incorreta 2">
-                    <input type="url" placeholder="URL da imagem 2">
-                </article>
-                <article>
-                    <input type="text" placeholder="Resposta incorreta 3">
-                    <input type="url" placeholder="URL da imagem 3">
-                </article>
+                    <article>
+                        <input type="text" placeholder="Texto da pergunta">
+                        <input type="color">
+                    </article>
+                    <h1>Resposta correta</h1>
+                    <article>
+                        <input type="text" placeholder="Resposta correta">
+                        <input type="url" placeholder="URL da imagem">
+                    </article>
+                    <h1>Respostas incorretas</h1>
+                    <article>
+                        <input type="text" placeholder="Resposta incorreta 1">
+                        <input type="url" placeholder="URL da imagem 1">
+                    </article>
+                    <article>
+                        <input type="text" placeholder="Resposta incorreta 2">
+                        <input type="url" placeholder="URL da imagem 2">
+                    </article>
+                    <article>
+                        <input type="text" placeholder="Resposta incorreta 3">
+                        <input type="url" placeholder="URL da imagem 3">
+                    </article>
                 </aside>
             </div>
         `
         i++;
     }
     
+}
+
+const turnOnOffEditBoard = (question)=>{
+    let div = question.parentNode
+    
+    let buttons = document.querySelectorAll('.editIcon')
+
+    let asides = document.querySelectorAll('.creationPages aside')
+
+    for (let i =0; i<asides.length;i++){
+        buttons[i].classList.remove('displayNone')
+        if(!(asides[i].classList.contains('displayNone'))){
+            asides[i].classList.add('displayNone')
+        }
+    }
+    question.classList.add('displayNone')
+    div.children[2].classList.remove('displayNone')
+
 }
