@@ -4,7 +4,7 @@
 function getQuizz(){
     const promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
     promise.then(renderQuizz)
-    promise.catch(functionerror)
+    promise.catch(errortoRender)
 }
 
 function renderQuizz(elem){
@@ -13,20 +13,22 @@ function renderQuizz(elem){
     console.log (elem.data)
     const QuizzList = elem.data;
     QuizzList.forEach(element => {
-        searchUl.innerHTML += `<li id=${element.id}>
-        <img src="${element.image}"> <h2>${element.title}</h2> 
+        searchUl.innerHTML += `<li onclick = "openQuizz(${element.id});" id=${element.id}>
+        <img src="${element.image}"> <h2>${element.title}</h2>
       </li>`
         
     });
 }
+function errortoRender(value){
+    alert("Erro ao comunicar-se com o servidor")
+}
 getQuizz();
-
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 
 function firstPageCreationQuizz (){
     const get1stpage=document.querySelector(".firstpage")
-    get1stpage.classList.add(".displayNone");
-    let main = document.querySelector('main');
+    get1stpage.classList.add("displayNone");
+    let main = document.querySelector('.thirdpage');
     main.innerHTML= `
     <div class="creationPages">
       <h1 class='titleCreationQuizz'>Comece pelo começo</h1>
