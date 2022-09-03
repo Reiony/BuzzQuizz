@@ -1,10 +1,36 @@
+function renderFirstPage(){
+    const main = document.querySelector("main");
+    main.innerHTML = `<div class="firstpage">
+        
+    <div class="createquizz-box">
+      <h3>Você não criou nenhum quizz ainda :(</h3>
+      <button onclick="firstPageCreationQuizz()">Criar Quizz</button>
+    </div> 
 
+    <div class="seusquizzes displayNone">
+      <div class="seusquizzes-title">
+        <h2 class="quizztab">Seus Quizzes</h2>
+        <ion-icon name="add-circle"></ion-icon>
+      </div>
+      <div class="containerseusquizzes">
+        <img src="https://http.cat/411.jpg" alt="">
+      </div>
+    </div>
+
+    <div class='pageBoard'>
+      <h2 class="quizztab allquizzes">Todos os Quizzes</h2>
+      <ul>
+      </ul>
+    </div>
+  </div>`
+}
+renderFirstPage();
 /* Pushing quizzes from API - BuzzQuizz */
 
 function getQuizz(){
     const promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
     promise.then(renderQuizz)
-    promise.catch(functionerror)
+    promise.catch(errortoRender)
 }
 
 function renderQuizz(elem){
@@ -20,7 +46,12 @@ function renderQuizz(elem){
     });
 
 }
+
 getQuizz();
+
+function errortoRender(){
+    alert("Falha ao Renderizar os Quizzes")
+}
 
 //FUNÇÃO PARA ESCONDER A LISTA DE QUIZZES E ABRIR O QUIZZ SELECIONADO ==========
 /* testezin */
@@ -34,50 +65,45 @@ function openQuizz(id){
     requisicao.then(renderizarQuizz);
    
 }
+let contador = 0;
 function renderizarQuizz(response) {
-
-    const get1stpage=document.querySelector(".firstpage")
-    get1stpage.classList.add("displayNone");
-
-    const containerPergunta=document.querySelector(".secondpage")
-    
+    const main = document.querySelector("main")
+    main.innerHTML="";
     const quizz = response.data;
     //console.log(quizz)
     const perguntas = quizz.questions;
+    console.log(perguntas);
 
-    containerPergunta.innerHTML += `
+    main.innerHTML += `
       <div class="banner">
         <img src="${quizz.image}">
         <div class="titulo">${quizz.title}</div>
       </div>
   `;
-  
-    for(let i=0; perguntas.length > i; i++){
-      containerPergunta.innerHTML +=`
-      <div class="perguntas">
-      <div class="pergunta " style="background-color: ${perguntas[i].color}">
-        ${perguntas[i].title}
-      </div>
-      </div>
+    
+    perguntas.forEach(element => {
+  /*       console.log(element)
+        console.log(element.answers.length); */
+        main.innerHTML +=`
+        <div class="perguntas">
+        <div class="pergunta " style="background-color: ${element.color}">
+            ${element.title}
+        </div>
+        <div class="resposta"></div>
+        </div>
     `;
-   
-    }
-    //funcaoquevaiadicionarrepostas();
+    adicionarespostas(element, element.answers.length);
+    });
 }
 
-/* function funcaoquevaiadicionarrepostas(response1){
-    const respostas =document.querySelector(".secondpage .perguntas");
-    //console.log(respostas)
-
-    console.log(response1.data)
-    
-    for (let i=0; i<respostas.length;i++){
-        //console.log(perguntas.answers[i].text);
-        ssss.innerHTML += `" <div class="resposta"><img src="${perguntas.answers[i].image}">${perguntas.answers[i].text}</div>`;
+function adicionarespostas(value, elemento){
+    console.log(value);
+    console.log(elemento);
+    const pegaresp = document.querySelector(".resposta");
+    for (let i=0;i<elemento;i++){
+        pegaresp.innerHTML+= `<img src="${value.answers[i].image}">${value.answers[i].text}`
     }
-}  */
-
-
+}
 
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 

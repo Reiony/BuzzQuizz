@@ -12,6 +12,7 @@ header{
     background: #EC362D;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     position:fixed;
+    top:0;
     display:flex;
     justify-content: center;
     align-items: center;
@@ -25,17 +26,23 @@ header{
     line-height: 43px;
     color: #FFFFFF;
 }
+
 /* INICIO DA FIRST PAGE */
 .firstpage{
-    width:1100px;
+    width:1050px;
+    margin: 0 auto;
+    padding-top:77px;
+}
+
+main{
     margin: 0 auto;
     padding-top:69px;
     display:flex;
     flex-direction: column;
 }
-
     /* INICIO CREATE QUIZZ */
 .createquizz-box{
+    Width: 100%;
     height: 181px;
     background: #FAFAFA;
     border: 1px dashed #D5D5D5;
@@ -43,7 +50,7 @@ header{
     display:flex;
     flex-direction: column;
     align-items:center;
-    margin:77px;
+    margin-bottom:77px;
 }
 
 .createquizz-box > h3{
@@ -59,6 +66,10 @@ header{
     color: #B9B9B9;
 }
 
+.pageBoard{
+    display:flex;
+    flex-direction: column;
+} 
 .createquizz-box button{
     width: 151px;
     height: 40px;
@@ -114,29 +125,28 @@ header{
     position:relative;
     border-radius: 5px;
     background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 65%, #000 100%);
-    border-radius: 5px;
 }
     /* FIM DA ABA SEUS QUIZZES */
 .allquizzes{
     margin-bottom:12px;
+    height: 23px;
 }
 ul{
-    width:1100px;
+    width: 100%;
     display:flex;
-    justify-content: space-between;
     flex-wrap:wrap;
-    gap:12px;
+    justify-content: center;
+    gap:15px;
 }
 li{
-    width: 350px;
+    width: 340px;
     height: 181px;
     display:flex;
-    justify-content: space-between;
     flex-wrap:wrap;
     position:relative;
-    border-radius: 5px;
     background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 65%, #000 100%);
     border-radius: 5px;
+    margin-bottom:13px;
 }
 li:hover{
     border: 1px red;
@@ -155,7 +165,6 @@ li > h2 {
     position:absolute;
     bottom:0;
     max-width: 340px;
-    height: 54px;
     font-style: normal;
     font-weight: 400;
     font-size: 19px;
@@ -164,7 +173,7 @@ li > h2 {
     align-items: center;
     color: #FFFFFF;
     word-break:break-all;
-    padding-left:20px;
+    padding:20px;
 }
 /* FINAL DA FIRST PAGE */
 
@@ -174,7 +183,8 @@ li > h2 {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    margin: 60px auto;
+    margin: 0 auto;
+    margin-top:140px;
     width: 600px;
     height: fit-content;
   }
@@ -287,19 +297,20 @@ li > h2 {
 }
 
 .perguntas{
- 
-  width: 759px;
-  height: 100%;
-  padding: 20px;
-
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+    margin: 0 auto;
+    width: 759px;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   
 
  
 }
 
+.perguntas:nth-child(0){
+    margin-top:42px;
+}
 .pergunta {
   
   width: 100%;
@@ -321,9 +332,7 @@ li > h2 {
   font-size: 20px;
   width: 330px;
   height: 200px;
-
   margin-top: 30px;
-   
 }
 
 .resposta img{
@@ -334,13 +343,14 @@ li > h2 {
 
 
 @media(max-width:1100px){
-    .createquizz-box{
-        width: 100%;
+    .firstpage{
+        width:90%;
     }
     ul{
-        width:100%
+        display:flex;
+        align-items: center;
+        justify-content: center;
     }
-    
 }
 
 @media(max-width:600px){
