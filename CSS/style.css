@@ -26,18 +26,18 @@ header{
     line-height: 43px;
     color: #FFFFFF;
 }
-
 /* INICIO DA FIRST PAGE */
 .firstpage{
+    width:1100px;
+    margin: 0 auto;
     padding-top:69px;
     display:flex;
     flex-direction: column;
-    justify-content: center;
-    align-items:center;
+    margin: 0 auto;
 }
 
+    /* INICIO CREATE QUIZZ */
 .createquizz-box{
-    width: 1100px;
     height: 181px;
     background: #FAFAFA;
     border: 1px dashed #D5D5D5;
@@ -82,25 +82,33 @@ header{
     color:white;
 
 }
-
-
-.pageBoard h2{
+    /* FIM CREATE QUIZZ */
+    /* ABA SEUS QUIZZES */
+.seusquizzes{
+    margin-bottom:42px;
+}
+.seusquizzes-title{
+    width:200px;
+    margin-top:69px;
+    display:flex;
+    align-items: center;
+    margin-bottom:12px;
+}
+.seusquizzes-title ion-icon{
+    width:30px;
+    height:30px;
+    color:red;
+}
+.quizztab{
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
-    padding: 20px;
+    margin-right:16px;
 }
 
-ul{
-    width:1100px;
-    display:flex;
-    justify-content: center;
-    flex-wrap:wrap;
-    gap:30px;
-}
-li{
-    width: 340px;
+.containerseusquizzes > img{
+    width: 350px;
     height: 181px;
     display:flex;
     justify-content: space-between;
@@ -110,7 +118,31 @@ li{
     background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 65%, #000 100%);
     border-radius: 5px;
 }
-
+    /* FIM DA ABA SEUS QUIZZES */
+.allquizzes{
+    margin-bottom:12px;
+}
+ul{
+    width:1100px;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap:wrap;
+    gap:12px;
+}
+li{
+    width: 350px;
+    height: 181px;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap:wrap;
+    position:relative;
+    border-radius: 5px;
+    background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 65%, #000 100%);
+    border-radius: 5px;
+}
+li:hover{
+    border: 1px red;
+}
 li > img {
     position:absolute;
     border-radius: 5px;
@@ -134,8 +166,10 @@ li > h2 {
     align-items: center;
     color: #FFFFFF;
     word-break:break-all;
+    padding-left:20px;
 }
 /* FINAL DA FIRST PAGE */
+
 /* PAGES FROM CREATION QUIZZ - INICIO DA SECOND PAGE */
 .creationPages{
     display: flex;
