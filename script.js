@@ -1,7 +1,31 @@
 
+/* Pushing quizzes from API - BuzzQuizz */
+
+function getQuizz(){
+    const promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
+    promise.then(renderQuizz)
+    promise.catch(functionerror)
+}
+
+function renderQuizz(elem){
+    const searchUl=document.querySelector("ul");
+    console.log (elem)
+    console.log (elem.data)
+    const QuizzList = elem.data;
+    QuizzList.forEach(element => {
+        searchUl.innerHTML += `<li id=${element.id}>
+        <img src="${element.image}"> <h2>${element.title}</h2> 
+      </li>`
+        
+    });
+}
+getQuizz();
+
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 
-const firstPageCreationQuizz = ()=>{
+function firstPageCreationQuizz (){
+    const get1stpage=document.querySelector(".firstpage")
+    get1stpage.classList.add(".displayNone");
     let main = document.querySelector('main');
     main.innerHTML= `
     <div class="creationPages">

@@ -26,12 +26,14 @@ header{
     color: #FFFFFF;
 }
 
-main{
+.firstpage{
     padding-top:69px;
     display:flex;
     flex-direction: column;
     justify-content: center;
     align-items:center;
+    background-color: aquamarine;
+
 }
 
 .createquizz-box{
@@ -107,20 +109,32 @@ li{
     border-radius: 5px;
     background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 65%, #000 100%);
     border-radius: 5px;
-
-    
 }
 
- li img {
+li > img {
     position:absolute;
     border-radius: 5px;
     width:100%;
     height:100%;
     top:0;
     left:0;
-    /* z-index:-1; */
+    z-index:-1;
 } 
 
+li > h2 {
+    position:absolute;
+    bottom:0;
+    max-width: 340px;
+    height: 54px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    word-break:break-all;
+}
 /* PAGES FROM CREATION QUIZZ */
 
 .creationPages{
