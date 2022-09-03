@@ -4,7 +4,7 @@
 function getQuizz(){
     const promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
     promise.then(renderQuizz)
-    promise.catch(errortoRender)
+    promise.catch(functionerror)
 }
 
 function renderQuizz(elem){
@@ -13,22 +13,78 @@ function renderQuizz(elem){
     console.log (elem.data)
     const QuizzList = elem.data;
     QuizzList.forEach(element => {
-        searchUl.innerHTML += `<li onclick = "openQuizz(${element.id});" id=${element.id}>
-        <img src="${element.image}"> <h2>${element.title}</h2>
+        searchUl.innerHTML += `<li onclick="openQuizz(${element.id})" id=${element.id}>
+        <img src="${element.image}"> <h2>${element.title}</h2> 
       </li>`
         
     });
-}
-function errortoRender(value){
-    alert("Erro ao comunicar-se com o servidor")
+
 }
 getQuizz();
+
+//FUNÇÃO PARA ESCONDER A LISTA DE QUIZZES E ABRIR O QUIZZ SELECIONADO ==========
+/* testezin */
+
+let quizzSelecionado = [];
+
+function openQuizz(id){
+    const requisicao = axios.get(
+      `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${id}`
+    );
+    requisicao.then(renderizarQuizz);
+   
+}
+function renderizarQuizz(response) {
+
+    const get1stpage=document.querySelector(".firstpage")
+    get1stpage.classList.add("displayNone");
+
+    const containerPergunta=document.querySelector(".secondpage")
+    
+    const quizz = response.data;
+    //console.log(quizz)
+    const perguntas = quizz.questions;
+
+    containerPergunta.innerHTML += `
+      <div class="banner">
+        <img src="${quizz.image}">
+        <div class="titulo">${quizz.title}</div>
+      </div>
+  `;
+  
+    for(let i=0; perguntas.length > i; i++){
+      containerPergunta.innerHTML +=`
+      <div class="perguntas">
+      <div class="pergunta " style="background-color: ${perguntas[i].color}">
+        ${perguntas[i].title}
+      </div>
+      </div>
+    `;
+   
+    }
+    //funcaoquevaiadicionarrepostas();
+}
+
+/* function funcaoquevaiadicionarrepostas(response1){
+    const respostas =document.querySelector(".secondpage .perguntas");
+    //console.log(respostas)
+
+    console.log(response1.data)
+    
+    for (let i=0; i<respostas.length;i++){
+        //console.log(perguntas.answers[i].text);
+        ssss.innerHTML += `" <div class="resposta"><img src="${perguntas.answers[i].image}">${perguntas.answers[i].text}</div>`;
+    }
+}  */
+
+
+
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 
 function firstPageCreationQuizz (){
     const get1stpage=document.querySelector(".firstpage")
-    get1stpage.classList.add("displayNone");
-    let main = document.querySelector('.thirdpage');
+    get1stpage.classList.add(".displayNone");
+    let main = document.querySelector('main');
     main.innerHTML= `
     <div class="creationPages">
       <h1 class='titleCreationQuizz'>Comece pelo começo</h1>
