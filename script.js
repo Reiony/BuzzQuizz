@@ -38,13 +38,12 @@ function renderizarQuizz(response) {
 
     const get1stpage=document.querySelector(".firstpage")
     get1stpage.classList.add("displayNone");
+
     const containerPergunta=document.querySelector(".secondpage")
     
     const quizz = response.data;
     //console.log(quizz)
     const perguntas = quizz.questions;
-    console.log(perguntas[1].answers)
-    const asRespostas = 
 
     containerPergunta.innerHTML += `
       <div class="banner">
