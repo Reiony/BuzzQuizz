@@ -4,7 +4,7 @@ function renderFirstPage(){
         
     <div class="createquizz-box">
       <h3>Você não criou nenhum quizz ainda :(</h3>
-      <button onclick="firstPageCreationQuizz()">Criar Quizz</button>
+      <button onclick="thirdPageCreationQuizz()">Criar Quizz</button>
     </div> 
 
     <div class="seusquizzes displayNone">
@@ -399,4 +399,37 @@ function isHexColor (hex) {
     return typeof hex === 'string'
         && hex.length === 6
         && !isNaN(Number('0x' + hex))
-  }
+}
+
+const thirdPageCreationQuizz = ()=>{
+
+    let main = document.querySelector('main')
+    main.innerHTML=`
+    <div class="creationPages">
+        <h1 class='titleCreationQuizz'>Agora, decida os níveis!</h1>
+        <section></section>
+        <button onclick="">Finalizar Quizz</button>
+    </div> `
+
+    /* let levels = quizz.levels */
+    let i =0
+    let level = 3
+    let askBoard = document.querySelector('.creationPages section')
+
+    while(i<level){
+        askBoard.innerHTML+=`
+            <div>
+                <h1>Nível ${i+1}</h1>
+                <ion-icon onclick="turnOnOffEditBoard(this)" class="editIcon" name="construct-outline"></ion-icon>
+                <aside class='displayNone'>
+                    <input type="text" placeholder="Título do Nível">
+                    <input type="number" placeholder="% de acerto mínima">
+                    <input type="url" placeholder="URL da imagem do nível">
+                    <textarea placeholder="Descrição do nível"></textarea>
+                </aside>
+            </div>
+        `
+        i++;
+    }
+
+}
