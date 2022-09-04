@@ -156,6 +156,14 @@ const startCreationQuizz = ()=>{
         
     }
 }
+const checkUrl = (string)=> {
+    try {
+     let url = new URL(string)
+     return true;
+   } catch(err) {
+       return false;
+   }
+ }
   
 /* FUNCTION THAT CREATE THE SECOND PAGE FROM QUIZZ CREATION */
 
