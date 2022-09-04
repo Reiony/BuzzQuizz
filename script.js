@@ -4,7 +4,7 @@ function renderFirstPage(){
         
     <div class="createquizz-box">
       <h3>Você não criou nenhum quizz ainda :(</h3>
-      <button onclick="firstPageCreationQuizz()">Criar Quizz</button>
+      <button onclick="thirdPageCreationQuizz()">Criar Quizz</button>
     </div> 
 
     <div class="seusquizzes displayNone">

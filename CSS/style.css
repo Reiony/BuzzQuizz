@@ -289,7 +289,7 @@ main {
     position: relative;
     margin-block: 30px;
   }
-  .creationPages div input{
+  .creationPages div input, textarea{
     width: 100%;
     height: 46px;
     margin-block: 5px;
@@ -298,6 +298,10 @@ main {
     font-size: 19px;
     line-height: 22px;
     padding-left: 10px;
+  }
+  textarea{
+    padding-top: 10px;
+    height:177px
   }
   .creationPages button{
     width: 75%;
