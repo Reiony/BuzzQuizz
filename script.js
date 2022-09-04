@@ -117,11 +117,6 @@ function selecionaResposta(clicado){
             anotherone[i].removeAttribute('onclick');
     }
     clicado.classList.remove("branquin");
-    /* if clicado.classList.contains("true"){
-        clicado.classList.add()
-    } else{
-        // do other stuff;
-    } */
 }
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 
