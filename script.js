@@ -94,10 +94,34 @@ function renderizarQuizz(response) {
         for(let j=0;j<novoarray.length;j++){
             const lll=document.querySelectorAll(".opções");
             lll[i].innerHTML+= `
-            <div class="resposta" onclick=""> <img src="${novoarray[j].image}"> <h3>${novoarray[j].text}</h3>
+            <div class="resposta ${novoarray[j].isCorrectAnswer}" onclick="selecionaResposta(this)"> <img src="${novoarray[j].image}"> <h3>${novoarray[j].text}</h3>
             </div>`
         }
     }
+}
+let acertos=0;
+function selecionaResposta(clicado){
+    const maisumteste = clicado.parentElement;
+    const anotherone=maisumteste.querySelectorAll(".resposta");
+    for(let i=0;i<anotherone.length;i++){
+        anotherone[i].classList.add("branquin")
+            console.log(anotherone[i].classList.value);
+            if (anotherone[i].classList.value==="resposta true branquin"){
+                anotherone[i].classList.add("verdin")
+                if(clicado.classList.value==="resposta true branquin verdin"){
+                    acertos++
+                }
+            } else {
+                anotherone[i].classList.add("vermelhin")
+            }
+            anotherone[i].removeAttribute('onclick');
+    }
+    clicado.classList.remove("branquin");
+    /* if clicado.classList.contains("true"){
+        clicado.classList.add()
+    } else{
+        // do other stuff;
+    } */
 }
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 
