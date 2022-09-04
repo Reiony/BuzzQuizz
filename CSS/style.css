@@ -356,6 +356,9 @@ main {
     color:red;
   }
 
+
+/*MOBILE*/
+
 @media(max-width:1100px){
     .firstpage{
         width:90%;
