@@ -46,7 +46,6 @@ function renderQuizz(elem){
     });
 
 }
-
 getQuizz();
 
 function errortoRender(){
@@ -54,9 +53,6 @@ function errortoRender(){
 }
 
 //FUNÇÃO PARA ESCONDER A LISTA DE QUIZZES E ABRIR O QUIZZ SELECIONADO ==========
-/* testezin */
-
-let quizzSelecionado = [];
 
 function openQuizz(id){
     const requisicao = axios.get(
@@ -65,46 +61,44 @@ function openQuizz(id){
     requisicao.then(renderizarQuizz);
    
 }
-let contador = 0;
+let perguntas;
+let arrayteste=[];
+let novoarray;
 function renderizarQuizz(response) {
+    console.log(response)
     const main = document.querySelector("main")
     main.innerHTML="";
     const quizz = response.data;
-    //console.log(quizz)
-    const perguntas = quizz.questions;
+    /* console.log(quizz) */
+    perguntas = response.data.questions;
     console.log(perguntas);
-
     main.innerHTML += `
       <div class="banner">
         <img src="${quizz.image}">
         <div class="titulo">${quizz.title}</div>
       </div>
   `;
-    
-    perguntas.forEach(element => {
-  /*       console.log(element)
-        console.log(element.answers.length); */
-        main.innerHTML +=`
-        <div class="perguntas">
-        <div class="pergunta " style="background-color: ${element.color}">
-            ${element.title}
+    for (let i=0;i<perguntas.length;i++){
+        arrayteste.push(perguntas[i].answers)
+        console.log(arrayteste[i])
+        novoarray=arrayteste[i].sort(()=>0.5 - Math.random());
+        console.log(arrayteste,novoarray)
+        main.innerHTML +=`<div class="caixaquizz">
+        <div class="pergunta " style="background-color: ${perguntas[i].color}">
+            ${perguntas[i].title}
         </div>
-        <div class="resposta"></div>
+        <div class="opções">
         </div>
-    `;
-    adicionarespostas(element, element.answers.length);
-    });
-}
-
-function adicionarespostas(value, elemento){
-    console.log(value);
-    console.log(elemento);
-    const pegaresp = document.querySelector(".resposta");
-    for (let i=0;i<elemento;i++){
-        pegaresp.innerHTML+= `<img src="${value.answers[i].image}">${value.answers[i].text}`
+        </div>
+        `
+        for(let j=0;j<novoarray.length;j++){
+            const lll=document.querySelectorAll(".opções");
+            lll[i].innerHTML+= `
+            <div class="resposta" onclick=""> <img src="${novoarray[j].image}"> <h3>${novoarray[j].text}</h3>
+            </div>`
+        }
     }
 }
-
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 
 function firstPageCreationQuizz (){
@@ -123,11 +117,7 @@ function firstPageCreationQuizz (){
       <button onclick="startCreationQuizz()">Prosseguir pra criar perguntas</button>
     </div>
     `
-}
 
-/* FUNCTION TO CHECK IF A STRING IS AN URL */
-
-const checkUrl = (string)=> {
     try {
      let url = new URL(string)
      return true;
