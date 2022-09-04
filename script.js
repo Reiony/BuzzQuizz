@@ -4,7 +4,7 @@ function renderFirstPage(){
         
     <div class="createquizz-box">
       <h3>Você não criou nenhum quizz ainda :(</h3>
-      <button onclick="fourthPageCreationQuizz()">Criar Quizz</button>
+      <button onclick="firstPageCreationQuizz()">Criar Quizz</button>
     </div> 
 
     <div class="seusquizzes displayNone">
@@ -196,9 +196,9 @@ const secondPageCreationQuizz = ()=>{
 
     while(i<questions){
         askBoard.innerHTML+=`
-            <div>
+            <div data-identifier="question-form">
                 <h1>Pergunta ${i+1}</h1>
-                <ion-icon onclick="turnOnOffEditBoard(this)" class="editIcon" name="construct-outline"></ion-icon>
+                <ion-icon data-identifier="expand" onclick="turnOnOffEditBoard(this)" class="editIcon" name="construct-outline"></ion-icon>
                 <aside class='displayNone'>
                     <article>
                         <input type="text" placeholder="Texto da pergunta">
@@ -414,9 +414,9 @@ const thirdPageCreationQuizz = ()=>{
 
     while(i<level){
         askBoard.innerHTML+=`
-            <div>
+            <div data-identifier="level">
                 <h1>Nível ${i+1}</h1>
-                <ion-icon onclick="turnOnOffEditBoard(this)" class="editIcon" name="construct-outline"></ion-icon>
+                <ion-icon data-identifier="expand" onclick="turnOnOffEditBoard(this)" class="editIcon" name="construct-outline"></ion-icon>
                 <aside class='displayNone'>
                     <input type="text" placeholder="Título do Nível">
                     <input type="number" placeholder="% de acerto mínima">
@@ -502,7 +502,9 @@ const checkValuesThirdPage = ()=>{
             alert('Necessário ter um valor 0')
         }else{
             quizz.levels = levels;
-            fourthPageCreationQuizz();
+            let promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', quizz)
+            promise.then(fourthPageCreationQuizz)
+            promise.catch(()=>alert('Erro ao gerar o quizz'))
 
         }
         
@@ -512,8 +514,10 @@ const checkValuesThirdPage = ()=>{
 
 /* FUNCTION THAT CREATE THE FOURTH PAGE FROM QUIZZ CREATION */
 
-const fourthPageCreationQuizz = ()=>{
+const fourthPageCreationQuizz = (promessa)=>{
 
+    let prome = promessa.data
+    console.log(prome)
     let main = document.querySelector('main')
     main.innerHTML=`
     <div class="creationPages">
