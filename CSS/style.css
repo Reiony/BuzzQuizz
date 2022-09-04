@@ -268,7 +268,7 @@ main {
     justify-content: space-around;
     align-items: center;
     margin: 0 auto;
-    margin-top:140px;
+    margin-top:100px;
     width: 600px;
     height: fit-content;
   }
@@ -356,6 +356,16 @@ main {
     color:red;
   }
 
+  #btnHome{
+    background-color: #ffffff;
+    color:#818181;
+    width: fit-content;
+    margin-top: 30px;
+  }
+
+  #btnHome:hover{
+    color: black;
+  }
 
 /*MOBILE*/
 

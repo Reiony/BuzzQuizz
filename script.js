@@ -4,7 +4,7 @@ function renderFirstPage(){
         
     <div class="createquizz-box">
       <h3>Você não criou nenhum quizz ainda :(</h3>
-      <button onclick="thirdPageCreationQuizz()">Criar Quizz</button>
+      <button onclick="fourthPageCreationQuizz()">Criar Quizz</button>
     </div> 
 
     <div class="seusquizzes displayNone">
@@ -23,6 +23,8 @@ function renderFirstPage(){
       </ul>
     </div>
   </div>`
+
+  getQuizz();
 }
 renderFirstPage();
 /* Pushing quizzes from API - BuzzQuizz */
@@ -46,7 +48,7 @@ function renderQuizz(elem){
     });
 
 }
-getQuizz();
+
 
 function errortoRender(){
     alert("Falha ao Renderizar os Quizzes")
@@ -136,15 +138,7 @@ function firstPageCreationQuizz (){
       <button onclick="startCreationQuizz()">Prosseguir pra criar perguntas</button>
     </div>
     `
-
-    try {
-     let url = new URL(string)
-     return true;
-   } catch(err) {
-       return false;
-   }
- }
-
+}
 const quizz = {}
 
 /* FUNCTION STARTS TO CREATE THE QUIZZ OBJECT AND CALLS secondPageCreationQuizz */
@@ -256,7 +250,7 @@ const turnOnOffEditBoard = (question)=>{
 
 }
 
-/* FUNCTION TO CHECK ALL THE VALUES FROM ASK AND QUESTION PAGE */
+/* FUNCTION TO CHECK ALL THE VALUES FROM SECOND PAGE */
 
 const checkValuesSecondPage = ()=>{
     
@@ -287,7 +281,7 @@ const checkValuesSecondPage = ()=>{
             /* Texto da pergunta */
             if (inputs[j].placeholder === 'Texto da pergunta'){
 
-                if (inputs[j].value !== ''){
+                if (inputs[j].value.length>=20){
                     question.title = inputs[j].value
                     must++
                 }
@@ -360,18 +354,17 @@ const checkValuesSecondPage = ()=>{
             
             
         }
+        /* PUSHING ANSWERS INTO AN ARRAY */
         if(Object.keys(answer1).length === 3){
             question.answers.push(answer1)
         }if(Object.keys(answer2).length === 3){
             question.answers.push(answer2)
-            need++;
         }if(Object.keys(answer3).length === 3){
             question.answers.push(answer3)
-            need++;
         }if(Object.keys(answer4).length === 3){
             question.answers.push(answer4)
-            need++;
         }
+
         quizz.questions.push(question)
         question = {}
         answer1 = {}
@@ -380,8 +373,15 @@ const checkValuesSecondPage = ()=>{
         answer4 = {}
     }
 
-    if(must === 4*divs.length && need>=(1*divs.length)){
-        alert('APROVADO')
+    /* CHECKING IF THERE ARE ENOUGH ANSWERS */
+    for (let z=0;z<quizz.questions.length;z++){
+        if(quizz.questions[z].answers.length>=2){
+            need++
+        }
+    }
+
+    if(must === 4*divs.length && need === quizz.questions.length){
+        thirdPageCreationQuizz();
     }else{
         alert('Tá Faltando coisa!!!')
     }
@@ -396,6 +396,8 @@ function isHexColor (hex) {
         && !isNaN(Number('0x' + hex))
 }
 
+/* FUNCTION THAT CREATE THE THIRD PAGE FROM QUIZZ CREATION */
+
 const thirdPageCreationQuizz = ()=>{
 
     let main = document.querySelector('main')
@@ -403,12 +405,11 @@ const thirdPageCreationQuizz = ()=>{
     <div class="creationPages">
         <h1 class='titleCreationQuizz'>Agora, decida os níveis!</h1>
         <section></section>
-        <button onclick="">Finalizar Quizz</button>
+        <button onclick="checkValuesThirdPage()">Finalizar Quizz</button>
     </div> `
 
-    /* let levels = quizz.levels */
+    let level = quizz.levels
     let i =0
-    let level = 3
     let askBoard = document.querySelector('.creationPages section')
 
     while(i<level){
@@ -426,5 +427,104 @@ const thirdPageCreationQuizz = ()=>{
         `
         i++;
     }
+
+}
+
+/* FUNCTION TO CHECK ALL THE VALUES FROM THIRD PAGE */
+
+const checkValuesThirdPage = ()=>{
+
+    let aside = document.querySelectorAll('.creationPages aside')
+
+    let level0 = 0
+
+    let must =0
+
+    quizz.levels=[]
+
+    let level = {}
+
+    let levels =[]
+
+    for (let i=0;i<aside.length;i++){
+
+        const inputsLevels = aside[i].children
+        
+        for (let j=0;j<inputsLevels.length;j++){
+
+            if (inputsLevels[j].placeholder === 'Título do Nível'){
+
+                if (inputsLevels[j].value.length >= 10){
+                    level.title = inputsLevels[j].value
+                    must++
+                }
+            }
+            else if (inputsLevels[j].placeholder === '% de acerto mínima'){
+                
+                if (inputsLevels[j].value !== ''){
+
+                    if (Number(inputsLevels[j].value)>=0 && Number(inputsLevels[j].value)<=100){
+                        level.minValue = Number(inputsLevels[j].value)
+                        must++
+                        if(Number(inputsLevels[j].value)===0){
+                            level0++;
+                        }
+                    }
+                    
+                }
+                
+            }else if (inputsLevels[j].placeholder === 'URL da imagem do nível'){
+                
+                if(checkUrl(inputsLevels[j].value)){
+                    level.image = inputsLevels[j].value
+                    must++
+                }
+            }
+            else if (inputsLevels[j].placeholder === 'Descrição do nível'){
+                
+                if (inputsLevels[j].value.length >= 30){
+                    level.text = inputsLevels[j].value;
+                    must++;
+                }
+            }
+            
+        }
+        if (must === (4*(i+1))){
+            levels.push(level)
+        }else{
+            alert('Falta informações.')
+        }
+        level ={}
+    }
+
+    if (levels.length === aside.length){
+        if(level0!==1){
+            alert('Necessário ter um valor 0')
+        }else{
+            quizz.levels = levels;
+            fourthPageCreationQuizz();
+
+        }
+        
+    }
+    console.log(quizz)
+}
+
+/* FUNCTION THAT CREATE THE FOURTH PAGE FROM QUIZZ CREATION */
+
+const fourthPageCreationQuizz = ()=>{
+
+    let main = document.querySelector('main')
+    main.innerHTML=`
+    <div class="creationPages">
+        <h1 class='titleCreationQuizz'>Seu quizz está pronto!</h1>
+        <ul>
+            <li>
+                <img src="${quizz.image}" alt="Quizz Image"> <h2>${quizz.title}</h2>
+            </li>
+        </ul>
+        <button style='margin-top:50px;' onclick="">Acessar quizz</button>
+        <button id='btnHome' onclick="renderFirstPage()">Voltar para home</button>
+    </div> `
 
 }
