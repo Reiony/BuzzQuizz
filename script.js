@@ -167,7 +167,7 @@ const secondPageCreationQuizz = ()=>{
         <div class="creationPages">
             <h1 class='titleCreationQuizz'>Crie suas perguntas</h1>
             <section></section>
-            <button onclick="">Prosseguir pra criar niveis</button>
+            <button onclick="checkValuesSecondPage()">Prosseguir pra criar niveis</button>
         </div>  
     `
     let i =0
@@ -181,7 +181,7 @@ const secondPageCreationQuizz = ()=>{
                 <aside class='displayNone'>
                     <article>
                         <input type="text" placeholder="Texto da pergunta">
-                        <input type="color">
+                        <input type="text" placeholder="Cor de fundo da pergunta">
                     </article>
                     <h1>Resposta correta</h1>
                     <article>
@@ -209,6 +209,8 @@ const secondPageCreationQuizz = ()=>{
     
 }
 
+/* FUNCTION SHOW EDIT BOARD FROM QUESTIONS */
+
 const turnOnOffEditBoard = (question)=>{
     let div = question.parentNode
     
@@ -226,3 +228,143 @@ const turnOnOffEditBoard = (question)=>{
     div.children[2].classList.remove('displayNone')
 
 }
+
+/* FUNCTION TO CHECK ALL THE VALUES FROM ASK AND QUESTION PAGE */
+
+const checkValuesSecondPage = ()=>{
+    
+    let divs = document.querySelectorAll('.creationPages div')
+
+    let must = 0;
+
+    let need=0;
+
+    quizz.questions = []
+    
+    let question = {}
+    
+    /* Validação das informações */
+    for (let i = 0; i<divs.length;i++){
+
+        question.answers=[];
+
+        let answer1 = {}
+        let answer2 = {}
+        let answer3 = {}
+        let answer4 = {}
+
+        let inputs = divs[i].querySelectorAll('input')
+    
+        for (let j = 0; j<inputs.length;j++){
+            
+            /* Texto da pergunta */
+            if (inputs[j].placeholder === 'Texto da pergunta'){
+
+                if (inputs[j].value !== ''){
+                    question.title = inputs[j].value
+                    must++
+                }
+            }/* Cor de fundo da pergunta */
+            else if (inputs[j].placeholder === 'Cor de fundo da pergunta'){
+
+                if (inputs[j].value !== ''){
+                    
+                    if(isHexColor((inputs[j].value).substring(1))){
+                        question.color = inputs[j].value;
+                        must++
+                    }
+                }
+            }/* Resposta certa */
+            else if (inputs[j].placeholder === 'Resposta correta'){
+
+                if (inputs[j].value !== ''){
+                    answer1.text = inputs[j].value
+                    answer1.isCorrectAnswer = true
+                    must++
+
+                }
+            }/* URL da imagem da resposta certa */
+            else if (inputs[j].placeholder === 'URL da imagem'){
+
+                if (checkUrl(inputs[j].value)){
+                    answer1.image = inputs[j].value
+                    must++
+                }
+            }/* Resposta Errada 1 */
+            else if (inputs[j].placeholder === 'Resposta incorreta 1'){
+
+                if (inputs[j].value !== ''){
+                    answer2.text = inputs[j].value
+                    answer2.isCorrectAnswer = false
+                }
+            }/* URL Resposta Errada 1 */
+            else if (inputs[j].placeholder === 'URL da imagem 1'){
+
+                if (checkUrl(inputs[j].value)){
+                    answer2.image = inputs[j].value
+                }
+            }/* Resposta Errada 2 */
+            else if (inputs[j].placeholder === 'Resposta incorreta 2'){
+
+                if (inputs[j].value !== ''){
+                    answer3.text = inputs[j].value
+                    answer3.isCorrectAnswer = false
+                }
+            }/* URL Resposta Errada 2 */
+            else if (inputs[j].placeholder === 'URL da imagem 2'){
+
+                if (checkUrl(inputs[j].value)){
+                    answer3.image = inputs[j].value
+                }
+            }/* Resposta Errada 3 */
+            else if (inputs[j].placeholder === 'Resposta incorreta 3'){
+
+                if (inputs[j].value !== ''){
+                    answer4.text = inputs[j].value
+                    answer4.isCorrectAnswer = false
+                }
+            }/* URL Resposta Errada 3 */
+            else if (inputs[j].placeholder === 'URL da imagem 3'){
+
+                if (checkUrl(inputs[j].value)){
+                    answer4.image = inputs[j].value
+                }
+            }
+            
+            
+        }
+        if(Object.keys(answer1).length === 3){
+            question.answers.push(answer1)
+        }if(Object.keys(answer2).length === 3){
+            question.answers.push(answer2)
+            need++;
+        }if(Object.keys(answer3).length === 3){
+            question.answers.push(answer3)
+            need++;
+        }if(Object.keys(answer4).length === 3){
+            question.answers.push(answer4)
+            need++;
+        }
+        quizz.questions.push(question)
+        question = {}
+        answer1 = {}
+        answer2 = {}
+        answer3 = {}
+        answer4 = {}
+    }
+
+    if(must === 4*divs.length && need>=(1*divs.length)){
+        alert('APROVADO')
+    }else{
+        alert('Tá Faltando coisa!!!')
+    }
+    console.log(quizz)
+}
+
+/* FUNCTION TO CHECK IF THE COLOR IS A HEX COLOR */
+
+function isHexColor (hex) {
+    return typeof hex === 'string'
+        && hex.length === 6
+        && !isNaN(Number('0x' + hex))
+  }
