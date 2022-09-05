@@ -7,13 +7,12 @@ function renderFirstPage() {
       <button onclick="firstPageCreationQuizz()" data-identifier="create-quizz">Criar Quizz</button>
     </div> 
 
-    <div class="seusquizzes ">
+    <div class="seusquizzes">
       <div class="seusquizzes-title">
         <h2 class="quizztab">Seus Quizzes</h2>
-        <ion-icon name="add-circle" data-identifier="create-quizz" onclick="firstPageCreationQuizz()"></ion-icon>
+        <ion-icon style="cursor:pointer;" name="add-circle" data-identifier="create-quizz" onclick="firstPageCreationQuizz()"></ion-icon>
       </div>
       <div class="containerseusquizzes" data-identifier="user-quizzes">
-        <img src="https://http.cat/411.jpg" alt="">
       </div>
     </div>
 
@@ -36,9 +35,37 @@ function getQuizz() {
 }
 
 function renderQuizz(elem) {
-    const searchUl = document.querySelector("ul");
-    /* console.log(elem)
-    console.log(elem.data) */
+    const searchUl = document.querySelector(".pageBoard ul");
+
+    let divMyQuizz = document.querySelector('.containerseusquizzes')
+    
+    let arrayId = localStorage.getItem('listaId')
+    if (arrayId !== null){
+
+        let getId = JSON.parse(localStorage.getItem('listaId'))
+        for (let i = 0; i<getId.length;i++){
+            
+            const requisicao = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${getId[i]}`);
+            requisicao.then((quizz)=>{
+                divMyQuizz.innerHTML += `<div class="meusQuizzes" onclick="openQuizz(${quizz.data.id})" id=${quizz.data.id} data-identifier="quizz-card">
+                                            <img src="${quizz.data.image}"> <h2>${quizz.data.title}</h2> 
+                                        </div>`
+
+            })
+            requisicao.catch(()=>alert('Não pegou seus quizzes'))
+        }
+
+    }else{
+        let boxCreateQuiz = document.querySelector('.createquizz-box')
+        boxCreateQuiz.classList.remove('displayNone')
+        let myBoxQuizz= document.querySelector('.seusquizzes')
+        myBoxQuizz.classList.add('displayNone')
+
+    }
+
+
+
+
     const QuizzList = elem.data;
     QuizzList.forEach(element => {
         searchUl.innerHTML += `<li onclick="openQuizz(${element.id})" id=${element.id} data-identifier="quizz-card">

@@ -151,7 +151,7 @@ ul{
     justify-content: center;
     gap:15px;
 }
-li{
+li, .meusQuizzes{
     width: 340px;
     height: 181px;
     display:flex;
@@ -187,6 +187,31 @@ li > h2 {
     color: #FFFFFF;
     word-break:break-all;
     padding:20px;
+}
+
+.meusQuizzes > img {
+  position:absolute;
+  border-radius: 5px;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  z-index:-1;
+} 
+
+.meusQuizzes > h2 {
+  position:absolute;
+  bottom:0;
+  max-width: 340px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  color: #FFFFFF;
+  word-break:break-all;
+  padding:20px;
 }
 /* FINAL DA FIRST PAGE */
 /*  PAGINA 2  */
