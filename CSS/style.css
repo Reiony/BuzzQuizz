@@ -129,6 +129,11 @@ main{
     margin-right:16px;
 }
 
+.containerseusquizzes{
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .containerseusquizzes > img{
     width: 350px;
     height: 181px;
@@ -530,6 +535,9 @@ li > h2 {
       align-items: center;
       justify-content: center;
   }
+  .containerseusquizzes{
+    justify-content: center;
+  }
   .caixaquizz{
     width:90%;
     height: 100%;
@@ -560,7 +568,7 @@ li > h2 {
     justify-content: center;
     align-items: center;
   }
-
+  
   .resposta >h3{
     width:100%;
     display: flex;

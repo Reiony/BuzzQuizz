@@ -12,7 +12,7 @@ function renderFirstPage() {
         <h2 class="quizztab">Seus Quizzes</h2>
         <ion-icon style="cursor:pointer;" name="add-circle" data-identifier="create-quizz" onclick="firstPageCreationQuizz()"></ion-icon>
       </div>
-      <div class="containerseusquizzes" data-identifier="user-quizzes">
+      <div style="display:flex; gap:15px;" class="containerseusquizzes" data-identifier="user-quizzes">
       </div>
     </div>
 
