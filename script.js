@@ -98,7 +98,7 @@ function renderizarQuizz(response) {
         /* console.log(arrayteste[i]) */
         novoarray = arrayteste[i].sort(() => 0.5 - Math.random());
         /* console.log(arrayteste,novoarray) */
-        main.innerHTML += `<div class="caixaquizz" id="${i}">
+        main.innerHTML += `<div class="caixaquizz">
         <div class="pergunta" style="background-color: ${perguntas[i].color}" data-identifier="question">
             ${perguntas[i].title}
         </div>
