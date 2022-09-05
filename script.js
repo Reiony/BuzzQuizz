@@ -164,16 +164,13 @@ function selecionaResposta(clicado) {
         anotherone[i].removeAttribute('onclick');
     }
     clicado.classList.remove("branquin");
-    respondidos++;
     setTimeout(function () {
         scrollaAi(outroteste, todascaixas)
     }, 2000);
-    /* setTimeout(function () {
-        scrollaAi(todascaixas)
-    }, 2000); */
 }
 let index;
 function scrollaAi(caixaclicada, listanodeCaixaQuizz) {
+    respondidos++;
     for (let i=0;i<listanodeCaixaQuizz.length-1;i++){
         if (caixaclicada===listanodeCaixaQuizz[i]){
             listanodeCaixaQuizz[(i+1)].scrollIntoView();
