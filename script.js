@@ -4,22 +4,22 @@ function renderFirstPage() {
         
     <div class="createquizz-box displayNone">
       <h3>Você não criou nenhum quizz ainda :(</h3>
-      <button onclick="firstPageCreationQuizz()">Criar Quizz</button>
+      <button onclick="firstPageCreationQuizz()" data-identifier="create-quizz">Criar Quizz</button>
     </div> 
 
     <div class="seusquizzes ">
       <div class="seusquizzes-title">
         <h2 class="quizztab">Seus Quizzes</h2>
-        <ion-icon name="add-circle" onclick="firstPageCreationQuizz()"></ion-icon>
+        <ion-icon name="add-circle" data-identifier="create-quizz" onclick="firstPageCreationQuizz()"></ion-icon>
       </div>
-      <div class="containerseusquizzes">
+      <div class="containerseusquizzes" data-identifier="user-quizzes">
         <img src="https://http.cat/411.jpg" alt="">
       </div>
     </div>
 
     <div class='pageBoard'>
       <h2 class="quizztab allquizzes">Todos os Quizzes</h2>
-      <ul>
+      <ul data-identifier="general-quizzes">
       </ul>
     </div>
   </div>`
@@ -41,7 +41,7 @@ function renderQuizz(elem) {
     console.log(elem.data)
     const QuizzList = elem.data;
     QuizzList.forEach(element => {
-        searchUl.innerHTML += `<li onclick="openQuizz(${element.id})" id=${element.id}>
+        searchUl.innerHTML += `<li onclick="openQuizz(${element.id})" id=${element.id} data-identifier="quizz-card">
         <img src="${element.image}"> <h2>${element.title}</h2> 
       </li>`
 
@@ -98,7 +98,7 @@ function renderizarQuizz(response) {
         novoarray = arrayteste[i].sort(() => 0.5 - Math.random());
         /* console.log(arrayteste,novoarray) */
         main.innerHTML += `<div class="caixaquizz" id="${i}">
-        <div class="pergunta" style="background-color: ${perguntas[i].color}">
+        <div class="pergunta" style="background-color: ${perguntas[i].color}" data-identifier="question">
             ${perguntas[i].title}
         </div>
         <div class="opções">
@@ -108,7 +108,7 @@ function renderizarQuizz(response) {
         for (let j = 0; j < novoarray.length; j++) {
             const lll = document.querySelectorAll(".opções");
             lll[i].innerHTML += `
-            <div class="resposta ${novoarray[j].isCorrectAnswer}" onclick="selecionaResposta(this,${j})"> <img src="${novoarray[j].image}"> <h3>${novoarray[j].text}</h3>
+            <div class="resposta ${novoarray[j].isCorrectAnswer}" onclick="selecionaResposta(this,${j})" data-identifier="answer"> <img src="${novoarray[j].image}" > <h3>${novoarray[j].text}</h3>
             </div>`
         }
     }
@@ -148,49 +148,44 @@ function scrollaAi(caixaclicada, listanodeCaixaQuizz) {
         pegaidsomado = somaid.getAttribute("id");
         somaid.scrollIntoView();
     } else {
-        criaListaOrdenada();
         const scoreofAccuracy = Math.floor((acertos / respondidos) * 100)
         console.log(scoreofAccuracy + "%")
-        index=arrayniveis.length - 1;
         for (let i = 0; i < (arrayniveis.length - 1); i++) {
             if ((scoreofAccuracy >= arrayniveis[i].minValue) && (scoreofAccuracy < arrayniveis[i + 1].minValue)) {
                 index = i;
-                return index;
+            } else {
+                index=arrayniveis.length - 1;
             }
-        }
+        } 
         adicionatelafinaleScrollaQuizz();
         
     }
 }
-let euvomeconfundir=[];
-function criaListaOrdenada(){
-    novalista = [];
-    euvomeconfundir=[];
-    for (let i = 0; i <arrayniveis.length; i++) {
-        novalista.push(arrayniveis[i].minValue)
-        euvomeconfundir.push(arrayniveis[i])
-        const listaordenada = novalista.sort(function (a, b) { return a - b });
-        console.log(listaordenada)
-    }
+function reiniciaQuizz(){
+    openQuizz(`${objetoquizz.id}`);
+}
+
+function RecarregaPagina(){
+    window.location.reload();
 }
 function adicionatelafinaleScrollaQuizz() {
     const scoreofAccuracy = Math.floor((acertos / respondidos) * 100)
     const main = document.querySelector("main")
     main.innerHTML += 
-    `<div class="telafinalquizz">
+    `<div class="telafinalquizz" data-identifier="quizz-result">
         <div class="botaocfquizz"> <h3>${scoreofAccuracy}% de acerto: ${arrayniveis[index].title}</h3>
         </div>
         <div class="sabotagemcfquizz">
             <img src="${arrayniveis[index].image}"><h4>${arrayniveis[index].text}</h4>
         </div>
     </div>`
-    const selecionatelafinal = document.querySelector(".telafinalquizz")
-    selecionatelafinal.scrollIntoView();
-
     main.innerHTML += `<div class="opfinal">
-        <button class="reiniciar" onclick=""><h4>Reiniciar Quizz</h4></button>
-        <button class="voltartudo" onclick=""><h5>Voltar para home</h5></button>
+        <button class="reiniciar" onclick="reiniciaQuizz()"><h4>Reiniciar Quizz</h4></button>
+        <button class="voltartudo" onclick="RecarregaPagina();"><h5>Voltar para home</h5></button>
         </div>`
+    const selecionabotaovoltar = document.querySelector(".voltartudo")
+    selecionabotaovoltar.scrollIntoView();
+
 }
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 
