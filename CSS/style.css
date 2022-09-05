@@ -3,8 +3,12 @@
 *{
   font-family:'Roboto', sans-serif;
   box-sizing: border-box;
+  word-break: break-all;
+  transition: all 0.2s ease-out;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 header{
   width:100%;
   height:69px;
@@ -251,15 +255,123 @@ main {
   display:flex;
   justify-content: center;
   align-items: center;
+  margin-bottom:10px;
 }
 .resposta h3{
   font-style: normal;
+  width: 330px;
+  height:35px;
   font-weight: 700;
   font-size: 20px;
   line-height: 23px;
   display: flex;
   align-items: center;
-  padding-top:9px;
+  overflow:hidden;
+}
+
+.telafinalquizz{
+  width: 759px;
+  height: 430px;
+  margin-top:20px;
+  padding:16px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom:57px;
+}
+
+.botaocfquizz{
+  width: 100%;
+  height: 25%;
+  background: #EC362D;
+  margin-bottom:18px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.botaocfquizz > h3{
+  height: 55%;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 23px;
+  line-height: 27px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color:#FFFFFF
+}
+
+.sabotagemcfquizz{
+  width:100%;
+  height: 70%;
+  display: flex;
+  gap:20px;
+  justify-content: space-between;
+  align-items: center;
+}
+.sabotagemcfquizz img{
+  width: 50%;
+  height: 100%;
+}
+
+.sabotagemcfquizz h4{
+  /* width: 53%; */
+  height: 100%;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 25px;
+  color: #484848;
+}
+.opfinal{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom:85px;
+}
+.reiniciar{
+  width:260px;
+  height: 52px;
+  background: #EC362D;
+  border:none;
+  border-radius: 15px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom:16px;
+}
+
+.reiniciar>h4{
+  font-style: normal;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #FFF5F4;
+}
+.voltartudo{
+  border:none;
+  background-color: transparent;
+  height:44px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.voltartudo>h5{
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #818181;
+  border:none;
 }
 /* PAGES FROM CREATION QUIZZ - INICIO DA THIRD PAGE */
 .creationPages{
@@ -347,7 +459,7 @@ main {
   }
 
   .branquin{
-    opacity:0.2;
+    opacity:0.3;
   }
   .verdin{
     color:green;

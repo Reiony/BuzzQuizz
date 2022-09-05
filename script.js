@@ -1,4 +1,4 @@
-function renderFirstPage(){
+function renderFirstPage() {
     const main = document.querySelector("main");
     main.innerHTML = `<div class="firstpage">
         
@@ -24,109 +24,178 @@ function renderFirstPage(){
     </div>
   </div>`
 
-  getQuizz();
+    getQuizz();
 }
 renderFirstPage();
 /* Pushing quizzes from API - BuzzQuizz */
 
-function getQuizz(){
+function getQuizz() {
     const promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
     promise.then(renderQuizz)
     promise.catch(errortoRender)
 }
 
-function renderQuizz(elem){
-    const searchUl=document.querySelector("ul");
-    console.log (elem)
-    console.log (elem.data)
+function renderQuizz(elem) {
+    const searchUl = document.querySelector("ul");
+    console.log(elem)
+    console.log(elem.data)
     const QuizzList = elem.data;
     QuizzList.forEach(element => {
         searchUl.innerHTML += `<li onclick="openQuizz(${element.id})" id=${element.id}>
         <img src="${element.image}"> <h2>${element.title}</h2> 
       </li>`
-        
+
     });
 
 }
 
 
-function errortoRender(){
+function errortoRender() {
     alert("Falha ao Renderizar os Quizzes")
 }
 
 //FUNÇÃO PARA ESCONDER A LISTA DE QUIZZES E ABRIR O QUIZZ SELECIONADO ==========
 
-function openQuizz(id){
+function openQuizz(id) {
     const requisicao = axios.get(
-      `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${id}`
+        `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${id}`
     );
     requisicao.then(renderizarQuizz);
-   
+
 }
 let perguntas;
-let arrayteste=[];
+let arrayteste = [];
 let novoarray;
+let arrayniveis = [];
+let objetoquizz;
 function renderizarQuizz(response) {
+    window.scrollTo(0, 0)
     console.log(response)
     const main = document.querySelector("main")
-    main.innerHTML="";
-    const quizz = response.data;
-    /* console.log(quizz) */
+    main.innerHTML = "";
+    objetoquizz = response.data;
+
+    console.log(objetoquizz.levels)
+    arrayniveis = [];
+    for (let h = 0; h < objetoquizz.levels.length; h++) {
+        arrayniveis.push(objetoquizz.levels[h])
+    }
+    console.log(arrayniveis);
+
+
+
     perguntas = response.data.questions;
     console.log(perguntas);
     main.innerHTML += `
       <div class="banner">
-        <img src="${quizz.image}">
-        <div class="titulo">${quizz.title}</div>
+        <img src="${objetoquizz.image}">
+        <div class="titulo">${objetoquizz.title}</div>
       </div>
   `;
-    for (let i=0;i<perguntas.length;i++){
+    for (let i = 0; i < perguntas.length; i++) {
         arrayteste.push(perguntas[i].answers)
-        console.log(arrayteste[i])
-        novoarray=arrayteste[i].sort(()=>0.5 - Math.random());
-        console.log(arrayteste,novoarray)
-        main.innerHTML +=`<div class="caixaquizz">
-        <div class="pergunta " style="background-color: ${perguntas[i].color}">
+        /* console.log(arrayteste[i]) */
+        novoarray = arrayteste[i].sort(() => 0.5 - Math.random());
+        /* console.log(arrayteste,novoarray) */
+        main.innerHTML += `<div class="caixaquizz" id="${i}">
+        <div class="pergunta" style="background-color: ${perguntas[i].color}">
             ${perguntas[i].title}
         </div>
         <div class="opções">
         </div>
         </div>
         `
-        for(let j=0;j<novoarray.length;j++){
-            const lll=document.querySelectorAll(".opções");
-            lll[i].innerHTML+= `
-            <div class="resposta ${novoarray[j].isCorrectAnswer}" onclick="selecionaResposta(this)"> <img src="${novoarray[j].image}"> <h3>${novoarray[j].text}</h3>
+        for (let j = 0; j < novoarray.length; j++) {
+            const lll = document.querySelectorAll(".opções");
+            lll[i].innerHTML += `
+            <div class="resposta ${novoarray[j].isCorrectAnswer}" onclick="selecionaResposta(this,${j})"> <img src="${novoarray[j].image}"> <h3>${novoarray[j].text}</h3>
             </div>`
         }
     }
 }
-let acertos=0;
-function selecionaResposta(clicado){
+let acertos = 0;
+let respondidos = 0;
+function selecionaResposta(clicado) {
     const maisumteste = clicado.parentElement;
-    const anotherone=maisumteste.querySelectorAll(".resposta");
-    for(let i=0;i<anotherone.length;i++){
+    const outroteste = maisumteste.parentElement;
+    const todascaixas = document.querySelectorAll(".caixaquizz");
+    const anotherone = maisumteste.querySelectorAll(".resposta");
+    for (let i = 0; i < anotherone.length; i++) {
         anotherone[i].classList.add("branquin")
-            console.log(anotherone[i].classList.value);
-            if (anotherone[i].classList.value==="resposta true branquin"){
-                anotherone[i].classList.add("verdin")
-                if(clicado.classList.value==="resposta true branquin verdin"){
-                    acertos++
-                }
-            } else {
-                anotherone[i].classList.add("vermelhin")
+        if (anotherone[i].classList.value === "resposta true branquin") {
+            anotherone[i].classList.add("verdin")
+            if (clicado.classList.value === "resposta true branquin verdin") {
+                acertos++
             }
-            anotherone[i].removeAttribute('onclick');
+        } else {
+            anotherone[i].classList.add("vermelhin")
+        }
+        anotherone[i].removeAttribute('onclick');
     }
     clicado.classList.remove("branquin");
+    respondidos++;
+    setTimeout(function () {
+        scrollaAi(outroteste, todascaixas)
+    }, 2000);
+}
+let somaid;
+let idCaixaclicada;
+let index;
+function scrollaAi(caixaclicada, listanodeCaixaQuizz) {
+    idCaixaclicada = caixaclicada.getAttribute("id");
+    if ((Number(idCaixaclicada) + 1) < listanodeCaixaQuizz.length) {
+        somaid = document.getElementById(`${Number(idCaixaclicada) + 1}`)
+        pegaidsomado = somaid.getAttribute("id");
+        somaid.scrollIntoView();
+    } else {
+        criaListaOrdenada();
+        const scoreofAccuracy = Math.floor((acertos / respondidos) * 100)
+        console.log(scoreofAccuracy + "%")
+        index=arrayniveis.length - 1;
+        for (let i = 0; i < (arrayniveis.length - 1); i++) {
+            if ((scoreofAccuracy >= arrayniveis[i].minValue) && (scoreofAccuracy < arrayniveis[i + 1].minValue)) {
+                index = i;
+                return index;
+            }
+        }
+        adicionatelafinaleScrollaQuizz();
+        
+    }
+}
+function criaListaOrdenada(){
+    novalista = [];
+    for (let i = 0; i <arrayniveis.length; i++) {
+        novalista.push(arrayniveis[i].minValue)
+        const listaordenada = novalista.sort(function (a, b) { return a - b });
+        console.log(listaordenada)
+    }
+}
+function adicionatelafinaleScrollaQuizz() {
+    const scoreofAccuracy = Math.floor((acertos / respondidos) * 100)
+    const main = document.querySelector("main")
+    main.innerHTML += 
+    `<div class="telafinalquizz">
+        <div class="botaocfquizz"> <h3>${scoreofAccuracy}% de acerto: ${arrayniveis[index].title}</h3>
+        </div>
+        <div class="sabotagemcfquizz">
+            <img src="${arrayniveis[index].image}"><h4>${arrayniveis[index].text}</h4>
+        </div>
+    </div>`
+    const selecionatelafinal = document.querySelector(".telafinalquizz")
+    selecionatelafinal.scrollIntoView();
+
+    main.innerHTML += `<div class="opfinal">
+        <button class="reiniciar" onclick=""><h4>Reiniciar Quizz</h4></button>
+        <button class="voltartudo" onclick=""><h5>Voltar para home</h5></button>
+        </div>`
 }
 /* FUNCTION THAT CREATE THE FIRST PAGE FROM QUIZZ CREATION */
 
-function firstPageCreationQuizz (){
-    const get1stpage=document.querySelector(".firstpage")
+function firstPageCreationQuizz() {
+    const get1stpage = document.querySelector(".firstpage")
     get1stpage.classList.add(".displayNone");
     let main = document.querySelector('main');
-    main.innerHTML= `
+    main.innerHTML = `
     <div class="creationPages">
       <h1 class='titleCreationQuizz'>Comece pelo começo</h1>
       <div class="inputs">
@@ -143,7 +212,7 @@ const quizz = {}
 
 /* FUNCTION STARTS TO CREATE THE QUIZZ OBJECT AND CALLS secondPageCreationQuizz */
 
-const startCreationQuizz = ()=>{
+const startCreationQuizz = () => {
 
     const inputs = document.querySelector('.inputs')
     const titleQuizz = inputs.children[0].value
@@ -151,53 +220,53 @@ const startCreationQuizz = ()=>{
     const qtdAsksQuizz = inputs.children[2].value
     const qtdLevelQuizz = inputs.children[3].value
 
-    if (titleQuizz.length > 65 || titleQuizz<20){
+    if (titleQuizz.length > 65 || titleQuizz < 20) {
         alert('Titulo errado')
-    }else if (!checkUrl(urlQuizz)){
+    } else if (!checkUrl(urlQuizz)) {
         alert('URL Inválida')
-    }else if (qtdAsksQuizz<3){
+    } else if (qtdAsksQuizz < 3) {
         alert('A quantidade de perguntas precisa ser maior ou igual a 3!')
-    }else if (qtdLevelQuizz<2){
+    } else if (qtdLevelQuizz < 2) {
         alert('A quantidade de niveis precisa ser maior ou igual a 2!')
-    }else{
+    } else {
 
         quizz.title = titleQuizz
         quizz.image = urlQuizz
         quizz.questions = Number(qtdAsksQuizz)
         quizz.levels = Number(qtdLevelQuizz)
         secondPageCreationQuizz()
-        
+
     }
 }
-const checkUrl = (string)=> {
+const checkUrl = (string) => {
     try {
-     let url = new URL(string)
-     return true;
-   } catch(err) {
-       return false;
-   }
- }
-  
+        let url = new URL(string)
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
+
 /* FUNCTION THAT CREATE THE SECOND PAGE FROM QUIZZ CREATION */
 
-const secondPageCreationQuizz = ()=>{
+const secondPageCreationQuizz = () => {
     let questions = quizz.questions
     let main = document.querySelector('main');
 
-    main.innerHTML= `
+    main.innerHTML = `
         <div class="creationPages">
             <h1 class='titleCreationQuizz'>Crie suas perguntas</h1>
             <section></section>
             <button onclick="checkValuesSecondPage()">Prosseguir pra criar niveis</button>
         </div>  
     `
-    let i =0
+    let i = 0
     let askBoard = document.querySelector('.creationPages section')
 
-    while(i<questions){
-        askBoard.innerHTML+=`
+    while (i < questions) {
+        askBoard.innerHTML += `
             <div data-identifier="question-form">
-                <h1>Pergunta ${i+1}</h1>
+                <h1>Pergunta ${i + 1}</h1>
                 <ion-icon data-identifier="expand" onclick="turnOnOffEditBoard(this)" class="editIcon" name="construct-outline"></ion-icon>
                 <aside class='displayNone'>
                     <article>
@@ -227,21 +296,21 @@ const secondPageCreationQuizz = ()=>{
         `
         i++;
     }
-    
+
 }
 
 /* FUNCTION SHOW EDIT BOARD FROM QUESTIONS */
 
-const turnOnOffEditBoard = (question)=>{
+const turnOnOffEditBoard = (question) => {
     let div = question.parentNode
-    
+
     let buttons = document.querySelectorAll('.editIcon')
 
     let asides = document.querySelectorAll('.creationPages aside')
 
-    for (let i =0; i<asides.length;i++){
+    for (let i = 0; i < asides.length; i++) {
         buttons[i].classList.remove('displayNone')
-        if(!(asides[i].classList.contains('displayNone'))){
+        if (!(asides[i].classList.contains('displayNone'))) {
             asides[i].classList.add('displayNone')
         }
     }
@@ -252,22 +321,22 @@ const turnOnOffEditBoard = (question)=>{
 
 /* FUNCTION TO CHECK ALL THE VALUES FROM SECOND PAGE */
 
-const checkValuesSecondPage = ()=>{
-    
+const checkValuesSecondPage = () => {
+
     let divs = document.querySelectorAll('.creationPages div')
 
     let must = 0;
 
-    let need=0;
+    let need = 0;
 
     quizz.questions = []
-    
-    let question = {}
-    
-    /* Validação das informações */
-    for (let i = 0; i<divs.length;i++){
 
-        question.answers=[];
+    let question = {}
+
+    /* Validação das informações */
+    for (let i = 0; i < divs.length; i++) {
+
+        question.answers = [];
 
         let answer1 = {}
         let answer2 = {}
@@ -275,93 +344,93 @@ const checkValuesSecondPage = ()=>{
         let answer4 = {}
 
         let inputs = divs[i].querySelectorAll('input')
-    
-        for (let j = 0; j<inputs.length;j++){
-            
-            /* Texto da pergunta */
-            if (inputs[j].placeholder === 'Texto da pergunta'){
 
-                if (inputs[j].value.length>=20){
+        for (let j = 0; j < inputs.length; j++) {
+
+            /* Texto da pergunta */
+            if (inputs[j].placeholder === 'Texto da pergunta') {
+
+                if (inputs[j].value.length >= 20) {
                     question.title = inputs[j].value
                     must++
                 }
             }/* Cor de fundo da pergunta */
-            else if (inputs[j].placeholder === 'Cor de fundo da pergunta'){
+            else if (inputs[j].placeholder === 'Cor de fundo da pergunta') {
 
-                if (inputs[j].value !== ''){
-                    
-                    if(isHexColor((inputs[j].value).substring(1))){
+                if (inputs[j].value !== '') {
+
+                    if (isHexColor((inputs[j].value).substring(1))) {
                         question.color = inputs[j].value;
                         must++
                     }
                 }
             }/* Resposta certa */
-            else if (inputs[j].placeholder === 'Resposta correta'){
+            else if (inputs[j].placeholder === 'Resposta correta') {
 
-                if (inputs[j].value !== ''){
+                if (inputs[j].value !== '') {
                     answer1.text = inputs[j].value
                     answer1.isCorrectAnswer = true
                     must++
 
                 }
             }/* URL da imagem da resposta certa */
-            else if (inputs[j].placeholder === 'URL da imagem'){
+            else if (inputs[j].placeholder === 'URL da imagem') {
 
-                if (checkUrl(inputs[j].value)){
+                if (checkUrl(inputs[j].value)) {
                     answer1.image = inputs[j].value
                     must++
                 }
             }/* Resposta Errada 1 */
-            else if (inputs[j].placeholder === 'Resposta incorreta 1'){
+            else if (inputs[j].placeholder === 'Resposta incorreta 1') {
 
-                if (inputs[j].value !== ''){
+                if (inputs[j].value !== '') {
                     answer2.text = inputs[j].value
                     answer2.isCorrectAnswer = false
                 }
             }/* URL Resposta Errada 1 */
-            else if (inputs[j].placeholder === 'URL da imagem 1'){
+            else if (inputs[j].placeholder === 'URL da imagem 1') {
 
-                if (checkUrl(inputs[j].value)){
+                if (checkUrl(inputs[j].value)) {
                     answer2.image = inputs[j].value
                 }
             }/* Resposta Errada 2 */
-            else if (inputs[j].placeholder === 'Resposta incorreta 2'){
+            else if (inputs[j].placeholder === 'Resposta incorreta 2') {
 
-                if (inputs[j].value !== ''){
+                if (inputs[j].value !== '') {
                     answer3.text = inputs[j].value
                     answer3.isCorrectAnswer = false
                 }
             }/* URL Resposta Errada 2 */
-            else if (inputs[j].placeholder === 'URL da imagem 2'){
+            else if (inputs[j].placeholder === 'URL da imagem 2') {
 
-                if (checkUrl(inputs[j].value)){
+                if (checkUrl(inputs[j].value)) {
                     answer3.image = inputs[j].value
                 }
             }/* Resposta Errada 3 */
-            else if (inputs[j].placeholder === 'Resposta incorreta 3'){
+            else if (inputs[j].placeholder === 'Resposta incorreta 3') {
 
-                if (inputs[j].value !== ''){
+                if (inputs[j].value !== '') {
                     answer4.text = inputs[j].value
                     answer4.isCorrectAnswer = false
                 }
             }/* URL Resposta Errada 3 */
-            else if (inputs[j].placeholder === 'URL da imagem 3'){
+            else if (inputs[j].placeholder === 'URL da imagem 3') {
 
-                if (checkUrl(inputs[j].value)){
+                if (checkUrl(inputs[j].value)) {
                     answer4.image = inputs[j].value
                 }
             }
-            
-            
+
+
         }
         /* PUSHING ANSWERS INTO AN ARRAY */
-        if(Object.keys(answer1).length === 3){
+        if (Object.keys(answer1).length === 3) {
             question.answers.push(answer1)
-        }if(Object.keys(answer2).length === 3){
+        } if (Object.keys(answer2).length === 3) {
             question.answers.push(answer2)
-        }if(Object.keys(answer3).length === 3){
+        } if (Object.keys(answer3).length === 3) {
             question.answers.push(answer3)
-        }if(Object.keys(answer4).length === 3){
+        } if (Object.keys(answer4).length === 3) {
             question.answers.push(answer4)
         }
 
@@ -374,15 +443,15 @@ const checkValuesSecondPage = ()=>{
     }
 
     /* CHECKING IF THERE ARE ENOUGH ANSWERS */
-    for (let z=0;z<quizz.questions.length;z++){
-        if(quizz.questions[z].answers.length>=2){
+    for (let z = 0; z < quizz.questions.length; z++) {
+        if (quizz.questions[z].answers.length >= 2) {
             need++
         }
     }
 
-    if(must === 4*divs.length && need === quizz.questions.length){
+    if (must === 4 * divs.length && need === quizz.questions.length) {
         thirdPageCreationQuizz();
-    }else{
+    } else {
         alert('Tá Faltando coisa!!!')
     }
     console.log(quizz)
@@ -390,7 +459,7 @@ const checkValuesSecondPage = ()=>{
 
 /* FUNCTION TO CHECK IF THE COLOR IS A HEX COLOR */
 
-function isHexColor (hex) {
+function isHexColor(hex) {
     return typeof hex === 'string'
         && hex.length === 6
         && !isNaN(Number('0x' + hex))
@@ -398,10 +467,10 @@ function isHexColor (hex) {
 
 /* FUNCTION THAT CREATE THE THIRD PAGE FROM QUIZZ CREATION */
 
-const thirdPageCreationQuizz = ()=>{
+const thirdPageCreationQuizz = () => {
 
     let main = document.querySelector('main')
-    main.innerHTML=`
+    main.innerHTML = `
     <div class="creationPages">
         <h1 class='titleCreationQuizz'>Agora, decida os níveis!</h1>
         <section></section>
@@ -409,13 +478,13 @@ const thirdPageCreationQuizz = ()=>{
     </div> `
 
     let level = quizz.levels
-    let i =0
+    let i = 0
     let askBoard = document.querySelector('.creationPages section')
 
-    while(i<level){
-        askBoard.innerHTML+=`
+    while (i < level) {
+        askBoard.innerHTML += `
             <div data-identifier="level">
-                <h1>Nível ${i+1}</h1>
+                <h1>Nível ${i + 1}</h1>
                 <ion-icon data-identifier="expand" onclick="turnOnOffEditBoard(this)" class="editIcon" name="construct-outline"></ion-icon>
                 <aside class='displayNone'>
                     <input type="text" placeholder="Título do Nível">
@@ -432,94 +501,94 @@ const thirdPageCreationQuizz = ()=>{
 
 /* FUNCTION TO CHECK ALL THE VALUES FROM THIRD PAGE */
 
-const checkValuesThirdPage = ()=>{
+const checkValuesThirdPage = () => {
 
     let aside = document.querySelectorAll('.creationPages aside')
 
     let level0 = 0
 
-    let must =0
+    let must = 0
 
-    quizz.levels=[]
+    quizz.levels = []
 
     let level = {}
 
-    let levels =[]
+    let levels = []
 
-    for (let i=0;i<aside.length;i++){
+    for (let i = 0; i < aside.length; i++) {
 
         const inputsLevels = aside[i].children
-        
-        for (let j=0;j<inputsLevels.length;j++){
 
-            if (inputsLevels[j].placeholder === 'Título do Nível'){
+        for (let j = 0; j < inputsLevels.length; j++) {
 
-                if (inputsLevels[j].value.length >= 10){
+            if (inputsLevels[j].placeholder === 'Título do Nível') {
+
+                if (inputsLevels[j].value.length >= 10) {
                     level.title = inputsLevels[j].value
                     must++
                 }
             }
-            else if (inputsLevels[j].placeholder === '% de acerto mínima'){
-                
-                if (inputsLevels[j].value !== ''){
+            else if (inputsLevels[j].placeholder === '% de acerto mínima') {
 
-                    if (Number(inputsLevels[j].value)>=0 && Number(inputsLevels[j].value)<=100){
+                if (inputsLevels[j].value !== '') {
+
+                    if (Number(inputsLevels[j].value) >= 0 && Number(inputsLevels[j].value) <= 100) {
                         level.minValue = Number(inputsLevels[j].value)
                         must++
-                        if(Number(inputsLevels[j].value)===0){
+                        if (Number(inputsLevels[j].value) === 0) {
                             level0++;
                         }
                     }
-                    
+
                 }
-                
-            }else if (inputsLevels[j].placeholder === 'URL da imagem do nível'){
-                
-                if(checkUrl(inputsLevels[j].value)){
+
+            } else if (inputsLevels[j].placeholder === 'URL da imagem do nível') {
+
+                if (checkUrl(inputsLevels[j].value)) {
                     level.image = inputsLevels[j].value
                     must++
                 }
             }
-            else if (inputsLevels[j].placeholder === 'Descrição do nível'){
-                
-                if (inputsLevels[j].value.length >= 30){
+            else if (inputsLevels[j].placeholder === 'Descrição do nível') {
+
+                if (inputsLevels[j].value.length >= 30) {
                     level.text = inputsLevels[j].value;
                     must++;
                 }
             }
-            
+
         }
-        if (must === (4*(i+1))){
+        if (must === (4 * (i + 1))) {
             levels.push(level)
-        }else{
+        } else {
             alert('Falta informações.')
         }
-        level ={}
+        level = {}
     }
 
-    if (levels.length === aside.length){
-        if(level0!==1){
+    if (levels.length === aside.length) {
+        if (level0 !== 1) {
             alert('Necessário ter um valor 0')
-        }else{
+        } else {
             quizz.levels = levels;
             let promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', quizz)
             promise.then(fourthPageCreationQuizz)
-            promise.catch(()=>alert('Erro ao gerar o quizz'))
+            promise.catch(() => alert('Erro ao gerar o quizz'))
 
         }
-        
+
     }
     console.log(quizz)
 }
 
 /* FUNCTION THAT CREATE THE FOURTH PAGE FROM QUIZZ CREATION */
 
-const fourthPageCreationQuizz = (promessa)=>{
+const fourthPageCreationQuizz = (promessa) => {
 
     let prome = promessa.data
     console.log(prome)
     let main = document.querySelector('main')
-    main.innerHTML=`
+    main.innerHTML = `
     <div class="creationPages">
         <h1 class='titleCreationQuizz'>Seu quizz está pronto!</h1>
         <ul>
