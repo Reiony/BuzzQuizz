@@ -87,7 +87,10 @@ function renderizarQuizz(response) {
 
     perguntas = response.data.questions;
     /* console.log(perguntas); */
-    header.innerHTML += `
+    header.innerHTML = `
+        <div class="logo">
+            <h1>BuzzQuizz</h1>
+        </div>
       <div class="banner">
         <img src="${objetoquizz.image}">
         <div class="titulo">${objetoquizz.title}</div>
@@ -172,6 +175,8 @@ function verificaNivelfinal(FinalScore){
     } 
 }
 function reiniciaQuizz(){
+    acertos=0;
+    respondidos=0;
     openQuizz(`${objetoquizz.id}`);
 }
 
