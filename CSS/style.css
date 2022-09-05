@@ -10,22 +10,32 @@ html {
   scroll-behavior: smooth;
 }
 header{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.logo{
+  position:fixed;
   width:100%;
+  top:0;
   height:69px;
   background: #EC362D;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  position:fixed;
-  top:0;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10;
 }
-.logo{
+.logo>h1{
+  height: 100%;
   font-style: normal;
   font-weight: 700;
   font-size: 37px;
   line-height: 43px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #FFFFFF;
 }
 
@@ -36,11 +46,12 @@ header{
     padding-top:77px;
 }
 main{
-    
-    margin: 0 auto;
-    padding-top:69px;
-    display:flex;
-    flex-direction: column;
+  padding-top: 69px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
 }
     /* INICIO CREATE QUIZZ */
 .createquizz-box{
@@ -179,24 +190,22 @@ li > h2 {
 }
 /* FINAL DA FIRST PAGE */
 /*  PAGINA 2  */
-main {
-  padding-top:69px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
-}
 
 .banner {
-  height: 227px;
+  position:relative;
+  margin-top: 69px;
+  top:0;
+  left:0;
+  right:0;
+  height:227px;
   width: 100%;
-  position: relative;
+  margin-bottom:42px;
 }
   
-.banner img {
+.banner > img {
+  position:absolute;
   width: 100%;
-  height: 100%;
+  height:100%;
   object-fit: cover;
 }
   
@@ -211,7 +220,7 @@ main {
   width: 100%;
   height: 100%;
   font-size: 39px;
-  background-color: rgba(0, 0, 0, 0.57);
+  background: rgba(0, 0, 0, 0.57);
   padding: 0 20px;
 }
 
@@ -221,34 +230,30 @@ main {
     height: 676px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     padding:36px;
-    margin-top:42px;
     margin-bottom:42px;
+    overflow: hidden;
  
 }
-.pergunta {
-  
+.pergunta{
   width: 100%;
-  height: 138px;
-  
+  height: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #ffffff;
   font-weight: 700;
   font-size: 23px;
-
- 
 }
 .opções{
-  height:466px;
+  height: 80%;
+  width: 100%;
   margin-top:20px;
-  max-width: 688px;
   display:flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap:10px;
 }
-
 .resposta img{
   width: 330px;
   height: 175px;
@@ -260,7 +265,7 @@ main {
 .resposta h3{
   font-style: normal;
   width: 330px;
-  height:35px;
+  height:40px;
   font-weight: 700;
   font-size: 20px;
   line-height: 23px;
@@ -491,7 +496,61 @@ main {
         justify-content: center;
     }
 }
+@media(max-width:1100px){
+  .firstpage{
+      width:90%;
+  }
+  ul{
+      display:flex;
+      align-items: center;
+      justify-content: center;
+  }
+  .caixaquizz{
+    width:90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .pergunta{
+    min-height:100px;
+  }
+  .opções{
+    width:100%;
+    padding: 0px 0px;
+    gap:2%;
+    justify-content: center;
+  }
+}
+@media(max-width:828px){
+    .resposta{
+    width:100%;
+    height:fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
+  .resposta >h3{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    text-align:center;
+    margin-bottom:25px;
+  }
+  .caixaquizz .opções .resposta img{
+    width:95%;
+    height:20%;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  } 
+}
 @media(max-width:600px){
     .creationPages{
         width: 100%;

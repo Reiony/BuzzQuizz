@@ -37,8 +37,8 @@ function getQuizz() {
 
 function renderQuizz(elem) {
     const searchUl = document.querySelector("ul");
-    console.log(elem)
-    console.log(elem.data)
+    /* console.log(elem)
+    console.log(elem.data) */
     const QuizzList = elem.data;
     QuizzList.forEach(element => {
         searchUl.innerHTML += `<li onclick="openQuizz(${element.id})" id=${element.id} data-identifier="quizz-card">
@@ -70,23 +70,24 @@ let arrayniveis = [];
 let objetoquizz;
 function renderizarQuizz(response) {
     window.scrollTo(0, 0)
-    console.log(response)
+    /* console.log(response) */
     const main = document.querySelector("main")
+    let header = document.querySelector('header');
     main.innerHTML = "";
     objetoquizz = response.data;
 
-    console.log(objetoquizz.levels)
+    /* console.log(objetoquizz.levels) */
     arrayniveis = [];
     for (let h = 0; h < objetoquizz.levels.length; h++) {
         arrayniveis.push(objetoquizz.levels[h])
     }
-    console.log(arrayniveis);
+    /* console.log(arrayniveis); */
 
 
 
     perguntas = response.data.questions;
-    console.log(perguntas);
-    main.innerHTML += `
+    /* console.log(perguntas); */
+    header.innerHTML += `
       <div class="banner">
         <img src="${objetoquizz.image}">
         <div class="titulo">${objetoquizz.title}</div>
@@ -137,29 +138,40 @@ function selecionaResposta(clicado) {
     setTimeout(function () {
         scrollaAi(outroteste, todascaixas)
     }, 2000);
+    /* setTimeout(function () {
+        scrollaAi(todascaixas)
+    }, 2000); */
 }
 let somaid;
 let idCaixaclicada;
 let index;
 function scrollaAi(caixaclicada, listanodeCaixaQuizz) {
-    idCaixaclicada = caixaclicada.getAttribute("id");
-    if ((Number(idCaixaclicada) + 1) < listanodeCaixaQuizz.length) {
-        somaid = document.getElementById(`${Number(idCaixaclicada) + 1}`)
-        pegaidsomado = somaid.getAttribute("id");
-        somaid.scrollIntoView();
-    } else {
-        const scoreofAccuracy = Math.floor((acertos / respondidos) * 100)
-        console.log(scoreofAccuracy + "%")
-        for (let i = 0; i < (arrayniveis.length - 1); i++) {
-            if ((scoreofAccuracy >= arrayniveis[i].minValue) && (scoreofAccuracy < arrayniveis[i + 1].minValue)) {
-                index = i;
-            } else {
-                index=arrayniveis.length - 1;
-            }
-        } 
-        adicionatelafinaleScrollaQuizz();
-        
+    for (let i=0;i<listanodeCaixaQuizz.length-1;i++){
+        if (caixaclicada===listanodeCaixaQuizz[i]){
+            listanodeCaixaQuizz[(i+1)].scrollIntoView();
+        }
     }
+    if ((caixaclicada===listanodeCaixaQuizz[listanodeCaixaQuizz.length-1]) && (respondidos<listanodeCaixaQuizz.length)){
+        alert("Falta responder outros itens! Verifique novamente")
+        window.scrollTo(0, 0);
+    }
+    if (respondidos===listanodeCaixaQuizz.length){
+        const scoreofAccuracy = Math.floor((acertos / respondidos) * 100)
+        console.log(scoreofAccuracy)
+        verificaNivelfinal(scoreofAccuracy);
+        adicionatelafinaleScrollaQuizz();
+    } 
+}
+
+function verificaNivelfinal(FinalScore){
+    console.log(FinalScore)
+    for (let i = 0; i < (arrayniveis.length - 1); i++) {
+        if ((FinalScore >= arrayniveis[i].minValue) && (FinalScore < arrayniveis[i + 1].minValue)) {
+            index = i;
+        } else {
+            index=arrayniveis.length - 1;
+        }
+    } 
 }
 function reiniciaQuizz(){
     openQuizz(`${objetoquizz.id}`);
