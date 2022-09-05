@@ -2,15 +2,15 @@ function renderFirstPage() {
     const main = document.querySelector("main");
     main.innerHTML = `<div class="firstpage">
         
-    <div class="createquizz-box">
+    <div class="createquizz-box displayNone">
       <h3>Você não criou nenhum quizz ainda :(</h3>
       <button onclick="firstPageCreationQuizz()">Criar Quizz</button>
     </div> 
 
-    <div class="seusquizzes displayNone">
+    <div class="seusquizzes ">
       <div class="seusquizzes-title">
         <h2 class="quizztab">Seus Quizzes</h2>
-        <ion-icon name="add-circle"></ion-icon>
+        <ion-icon name="add-circle" onclick="firstPageCreationQuizz()"></ion-icon>
       </div>
       <div class="containerseusquizzes">
         <img src="https://http.cat/411.jpg" alt="">
@@ -162,10 +162,13 @@ function scrollaAi(caixaclicada, listanodeCaixaQuizz) {
         
     }
 }
+let euvomeconfundir=[];
 function criaListaOrdenada(){
     novalista = [];
+    euvomeconfundir=[];
     for (let i = 0; i <arrayniveis.length; i++) {
         novalista.push(arrayniveis[i].minValue)
+        euvomeconfundir.push(arrayniveis[i])
         const listaordenada = novalista.sort(function (a, b) { return a - b });
         console.log(listaordenada)
     }
@@ -572,8 +575,8 @@ const checkValuesThirdPage = () => {
         } else {
             quizz.levels = levels;
             let promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', quizz)
-            promise.then(fourthPageCreationQuizz)
-            promise.catch(() => alert('Erro ao gerar o quizz'))
+            promise.then(saveQuizz)
+            promise.catch(()=>alert('Erro ao salvar o quizz'))
 
         }
 
@@ -583,10 +586,35 @@ const checkValuesThirdPage = () => {
 
 /* FUNCTION THAT CREATE THE FOURTH PAGE FROM QUIZZ CREATION */
 
-const fourthPageCreationQuizz = (promessa) => {
+let idActualQuizz
 
-    let prome = promessa.data
-    console.log(prome)
+const saveQuizz = (promessa)=>{
+
+    let idQuizz= promessa.data.id
+    idActualQuizz = idQuizz;
+
+    let arr=[];
+    arr.push(idQuizz);    
+
+    let arrayId = localStorage.getItem('listaId')
+    
+    if(arrayId ===null){
+
+        let idStr = JSON.stringify(arr)
+        localStorage.setItem('listaId', idStr)
+    }else{
+        
+        let getId = JSON.parse(localStorage.getItem('listaId'))
+        getId.push(idQuizz)
+        let getIdStr = JSON.stringify(getId)
+        localStorage.setItem('listaId', getIdStr)
+    }
+    fourthPageCreationQuizz()
+}
+
+const fourthPageCreationQuizz = ()=>{
+
+    
     let main = document.querySelector('main')
     main.innerHTML = `
     <div class="creationPages">
@@ -596,8 +624,7 @@ const fourthPageCreationQuizz = (promessa) => {
                 <img src="${quizz.image}" alt="Quizz Image"> <h2>${quizz.title}</h2>
             </li>
         </ul>
-        <button style='margin-top:50px;' onclick="">Acessar quizz</button>
+        <button style='margin-top:50px;' onclick="openQuizz(idActualQuizz)">Acessar quizz</button>
         <button id='btnHome' onclick="renderFirstPage()">Voltar para home</button>
     </div> `
-
 }
