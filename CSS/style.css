@@ -357,6 +357,7 @@ li > h2 {
   font-size: 19px;
   line-height: 25px;
   color: #484848;
+  overflow: hidden;
 }
 .opfinal{
   display:flex;
