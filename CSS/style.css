@@ -522,6 +522,9 @@ li > h2 {
     gap:2%;
     justify-content: center;
   }
+  .telafinalquizz{
+    width:90%;
+  }
 }
 @media(max-width:828px){
     .resposta{
@@ -550,9 +553,6 @@ li > h2 {
     justify-content: center;
     align-items: center;
   } 
-  .telafinalquizz{
-    width:90%;
-  }
 }
 @media(max-width:600px){
     .creationPages{
