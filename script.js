@@ -142,8 +142,6 @@ function selecionaResposta(clicado) {
         scrollaAi(todascaixas)
     }, 2000); */
 }
-let somaid;
-let idCaixaclicada;
 let index;
 function scrollaAi(caixaclicada, listanodeCaixaQuizz) {
     for (let i=0;i<listanodeCaixaQuizz.length-1;i++){
